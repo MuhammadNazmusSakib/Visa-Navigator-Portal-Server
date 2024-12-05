@@ -44,6 +44,13 @@ async function run() {
       const result = await allVisaDb.findOne(query)
       res.send(result)
     })
+    // getting a specific data(my added visa) from database (api)
+    app.get('/addedVisaData/email/:email', async (req, res) => {
+      const email = req.params.email
+      const query = { email: email }; // Use email directly in the query
+      const result = await allVisaDb.find(query).toArray(); // Retrieve all applications for the email
+      res.send(result)
+    })
     // storing data in database
     app.post('/addedVisaData', async (req, res) => {
       const addedVisaData = req.body
@@ -59,7 +66,7 @@ async function run() {
       const result = await cursor.toArray()
       res.send(result)
     })
-    // getting a specific data from my visa database (api)
+    // getting a specific data(my visa application) from my visa database (api)
     app.get('/applicationData/email/:email', async (req, res) => {
       const email = req.params.email
       const query = { email: email }; // Use email directly in the query
@@ -76,7 +83,7 @@ async function run() {
     // deleting specific data from my visa data in database
     app.delete('/applicationData/:id', async (req, res) => {
       const id = req.params.id
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await myVisaDb.deleteOne(query)
       res.send(result)
     })
