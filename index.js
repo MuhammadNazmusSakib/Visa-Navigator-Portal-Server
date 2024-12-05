@@ -58,6 +58,13 @@ async function run() {
       const result = await allVisaDb.insertOne(addedVisaData)
       res.send(result)
     })
+    // deleting specific data from my visa data in database
+    app.delete('/addedVisaData/:id', async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
+      const result = await allVisaDb.deleteOne(query)
+      res.send(result)
+    })
 
     // MY VISA DATA-------------------------------------------------
     // getting my visa data from database (api)
