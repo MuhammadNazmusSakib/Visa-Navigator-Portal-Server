@@ -59,6 +59,17 @@ async function run() {
       const result = await cursor.toArray()
       res.send(result)
     })
+    // getting a specific data from my visa database (api)
+    app.get('/applicationData/email/:email', async (req, res) => {
+      const email = req.params.email
+      const query = { email: email }; // Use email directly in the query
+      const result = await myVisaDb.find(query).toArray(); // Retrieve all applications for the email
+      if (result.length > 0) {
+        res.status(200).send(result);
+      } else {
+        res.status(404).send({ message: "No applications found for this email" });
+      }
+    })
     // storing my visa data in database
     app.post('/applicationData', async (req, res) => {
       const addedVisaData = req.body
