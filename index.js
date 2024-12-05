@@ -64,17 +64,20 @@ async function run() {
       const email = req.params.email
       const query = { email: email }; // Use email directly in the query
       const result = await myVisaDb.find(query).toArray(); // Retrieve all applications for the email
-      if (result.length > 0) {
-        res.status(200).send(result);
-      } else {
-        res.status(404).send({ message: "No applications found for this email" });
-      }
+      res.send(result)
     })
     // storing my visa data in database
     app.post('/applicationData', async (req, res) => {
       const addedVisaData = req.body
       console.log(addedVisaData)
       const result = await myVisaDb.insertOne(addedVisaData)
+      res.send(result)
+    })
+    // deleting specific data from my visa data in database
+    app.delete('/applicationData/:id', async (req, res) => {
+      const id = req.params.id
+      const query = {_id: new ObjectId(id)}
+      const result = await myVisaDb.deleteOne(query)
       res.send(result)
     })
 
