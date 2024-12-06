@@ -51,6 +51,29 @@ async function run() {
       const result = await allVisaDb.find(query).toArray(); // Retrieve all applications for the email
       res.send(result)
     })
+    // updating a specific data (my added visa) from database (api)
+    app.put('/addedVisaData/:id', async (req, res) => {
+      const id = req.params.id
+      const filter = { _id: new ObjectId(id) }
+      const options = { upsert: true }
+      const formData = req.body
+      const visaInfo = {
+        $set: {
+          countryImage: formData.countryImage,
+          countryName: formData.countryName,
+          visaType: formData.visaType,
+          processingTime: formData.processingTime,
+          requiredDocuments: formData.requiredDocuments,
+          description: formData.description,
+          ageRestriction: formData.ageRestriction,
+          fee: formData.fee,
+          validity: formData.validity,
+          applicationMethod: formData.applicationMethod,
+        }
+      }
+      const result = await allVisaDb.updateOne(filter, visaInfo, options)
+      res.send(result)
+    })
     // storing data in database
     app.post('/addedVisaData', async (req, res) => {
       const addedVisaData = req.body
