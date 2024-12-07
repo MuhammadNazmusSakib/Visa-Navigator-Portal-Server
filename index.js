@@ -37,6 +37,15 @@ async function run() {
       const result = await cursor.toArray()
       res.send(result)
     })
+    // getting limited data (6) from database (api)
+    app.get('/latestVisaData', async (req, res) => {
+      const cursor = allVisaDb
+        .find()
+        .sort({ createdAt: -1 }) // Sort by createdAt field in descending order
+        .limit(6); // Limit to 6 records
+      const result = await cursor.toArray();
+      res.send(result);
+    })
     // getting a specific data from database (api)
     app.get('/addedVisaData/:id', async (req, res) => {
       const id = req.params.id
@@ -77,7 +86,8 @@ async function run() {
     // storing data in database
     app.post('/addedVisaData', async (req, res) => {
       const addedVisaData = req.body
-      console.log(addedVisaData)
+      addedVisaData.createdAt = new Date()
+      // console.log(addedVisaData)
       const result = await allVisaDb.insertOne(addedVisaData)
       res.send(result)
     })
@@ -106,7 +116,8 @@ async function run() {
     // storing my visa data in database
     app.post('/applicationData', async (req, res) => {
       const addedVisaData = req.body
-      console.log(addedVisaData)
+      addedVisaData.createdAt = new Date()
+      // console.log(addedVisaData)
       const result = await myVisaDb.insertOne(addedVisaData)
       res.send(result)
     })
